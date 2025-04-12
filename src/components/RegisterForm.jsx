@@ -2,26 +2,20 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 export default function RegisterForm() {
-
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
-
-  const router = useRouter();
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
+  const { login } = useAuth()
+  const router = useRouter()
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-    setSuccess('');
-
-    if (!name || !email || !password) {
-      setError("Please fill all fields");
-      return;
-    }
+    e.preventDefault()
+    setError('')
 
     try {
       const res = await fetch("http://localhost:5000/api/register", {
@@ -30,25 +24,30 @@ export default function RegisterForm() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ name, email, password }),
-      });
+      })
 
-      const data = await res.json();
+      const data = await res.json()
 
       if (!res.ok) {
-        setError(data.error || "Invalid details");
-        return;
+        throw new Error(data.error || "Registration failed")
       }
 
-      setSuccess(data.message || "User registered successfully");
-      setName('');
-      setEmail('');
-      setPassword('');
-      router.push("/dashboard");
+      // Automatically log in after registration
+      const loginRes = await fetch("http://localhost:5000/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      })
+
+      const loginData = await loginRes.json()
+      login(loginData.access_token, loginData.user)
+      router.push('/dashboard')
     } catch (error) {
-      console.error("Error:", error);
-      setError("Something went wrong. Please try again.");
+      setError(error.message)
     }
-  };
+  }
 
   return (
 <div className="grid place-items-center h-screen">

@@ -1,16 +1,14 @@
-# routes/login.py
-
 from flask import Blueprint, request, jsonify
 from werkzeug.security import check_password_hash
+from flask_jwt_extended import create_access_token, create_refresh_token
 from lib.mongodb import db
-from model.user import UserSchema
+from bson.objectid import ObjectId
 
 loginform_blueprint = Blueprint('loginform', __name__)
 
 @loginform_blueprint.route('/api/login', methods=['POST'])
 def login_user():
     data = request.get_json()
-
     email = data.get('email')
     password = data.get('password')
 
@@ -24,5 +22,16 @@ def login_user():
     if not check_password_hash(user['password'], password):
         return jsonify({'error': 'Incorrect password'}), 401
 
-    return jsonify({'message': 'Login successful', 'name': user['name']}), 200
-
+    access_token = create_access_token(identity=str(user['_id']))
+    refresh_token = create_refresh_token(identity=str(user['_id']))
+    
+    return jsonify({
+        'message': 'Login successful',
+        'access_token': access_token,
+        'refresh_token': refresh_token,
+        'user': {
+            'id': str(user['_id']),
+            'name': user['name'],
+            'email': user['email']
+        }
+    }), 200

@@ -2,24 +2,19 @@
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
 
 function LoginForm() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
-
-  const router = useRouter();
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
+  const { login } = useAuth()
+  const router = useRouter()
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    setError('');
-    setSuccess('');
-
-    if (!email || !password) {
-      setError("Please enter both email and password");
-      return;
-    }
+    e.preventDefault()
+    setError('')
 
     try {
       const res = await fetch("http://localhost:5000/api/login", {
@@ -28,27 +23,20 @@ function LoginForm() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
-      });
+      })
 
-      const data = await res.json();
+      const data = await res.json()
 
       if (!res.ok) {
-        setError(data.error || "Login failed");
-      } else {
-        setSuccess(data.message);
-        setEmail('');
-        setPassword('');
-        router.push('/dashboard'); // Redirect to home page or dashboard
-        // Optional: Redirect or store token
-
+        throw new Error(data.error || "Login failed")
       }
 
+      login(data)
+      router.push('/dashboard')
     } catch (err) {
-      console.error("Login error:", err);
-      setError("Something went wrong. Try again.");
+      setError(err.message)
     }
-  };
-
+  }
   return (
     <div className="grid place-items-center h-screen">
       <div className="shadow-lg p-2 border-t-4 border-purple-500 rounded-md">

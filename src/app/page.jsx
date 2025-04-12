@@ -9,7 +9,8 @@ export default function Home() {
       {/* <StockMetrics /> */}
       {/* <Widgets /> */}
       {/* <FinViewModal/> */}
-      <LoginForm/>
+      {/* <LoginForm/> */}
+      hello
     </main>
   );
 }

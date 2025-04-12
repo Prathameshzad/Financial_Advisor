@@ -1,9 +1,11 @@
-import RegisterForm from "@/components/RegisterForm";
+"use client"
+import RegisterForm from '@/components/RegisterForm'
+import GuestRoute from '@/components/GuestRoute'
 
-export default function Register() {
+export default function RegisterPage() {
   return (
-    <div>
-      <RegisterForm/>
-    </div>
+    <GuestRoute>
+      <RegisterForm />
+    </GuestRoute>
   )
 }
