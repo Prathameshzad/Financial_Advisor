@@ -4,6 +4,12 @@ yfinance
 pandas
 numpy
 scipy
+pymongo
+python-dotenv
+pydantic
+dotenv
+datatime
+PyJWT
 # python -m venv venv
 # source venv/bin/activate    # For Linux/Mac
 # venv\Scripts\activate       # For Windows
