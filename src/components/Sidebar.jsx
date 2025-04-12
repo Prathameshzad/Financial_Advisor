@@ -9,16 +9,22 @@ export default function Sidebar() {
         </div>
         <ul className="mt-4">
           <li className="p-4 hover:bg-gray-700 cursor-pointer">
-            <Link href="/">Home</Link>
+            <Link href="/dashboard">Home</Link>
           </li>
           <li className="p-4 hover:bg-gray-700 cursor-pointer">
             <Link href="/dashboard/profile">Profile</Link>
           </li>
           <li className="p-4 hover:bg-gray-700 cursor-pointer">
-            <Link href="/settings">Settings</Link>
+            <Link href="/dashboard/stock-metrics">Stock Metrics</Link>
           </li>
           <li className="p-4 hover:bg-gray-700 cursor-pointer">
-            <Link href="/logout">Logout</Link>
+            <Link href="/dashboard/finview">Finview</Link>
+          </li>
+          <li className="p-4 hover:bg-gray-700 cursor-pointer">
+            <Link href="/dashboard/widgets">Widgets</Link>
+          </li>
+          <li className="p-4 hover:bg-gray-700 cursor-pointer">
+            <Link href="/dashboard/portfolio">Portfolio</Link>
           </li>
         </ul>
       </div>
