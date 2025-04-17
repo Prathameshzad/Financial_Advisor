@@ -1,6 +1,6 @@
 import DashboardCards from "@/components/dashboard/DashboardCards";
 import GolbalNewsCard from "@/components/dashboard/GolbalNewsCard";
-import FinancialNews from "@/components/FinancialNews";
+import IndiaNews from "@/components/dashboard/IndiaNews";
 
 export default function Dashboard() {
   return (
@@ -9,7 +9,6 @@ export default function Dashboard() {
       <div className="w-3/4">
         <DashboardCards />
       </div>
-      {/* <FinancialNews/> */}
       {/* Right Section - News Card */}
       <div className="w-1/4">
         <GolbalNewsCard />
