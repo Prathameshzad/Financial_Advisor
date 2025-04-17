@@ -22,7 +22,7 @@ from register import registerform_blueprint
 from login import loginform_blueprint
 from profile import profile_blueprint
 from portfolio import portfolio_blueprint
-from news import news_blueprint 
+from news import news_blueprint
 
 app.register_blueprint(stock_metrics_blueprint)
 app.register_blueprint(widgets_blueprint)
