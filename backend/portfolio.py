@@ -15,6 +15,23 @@ def get_current_price(symbol):
         return todays_data['Close'].iloc[-1]
     except:
         return None
+    
+def get_stock_data(symbol):
+    try:
+        ticker = yf.Ticker(symbol)
+        # Get today's and yesterday's data
+        data = ticker.history(period='2d')
+        if len(data) < 2:
+            return None, None, None
+        
+        current_price = data['Close'].iloc[-1]
+        previous_close = data['Close'].iloc[-2]
+        change = current_price - previous_close
+        change_percent = (change / previous_close) * 100
+        
+        return current_price, change, change_percent
+    except:
+        return None, None, None
 
 @portfolio_blueprint.route('/api/portfolio', methods=['POST'])
 @jwt_required()
@@ -45,6 +62,7 @@ def add_portfolio_item():
 
 @portfolio_blueprint.route('/api/portfolio', methods=['GET'])
 @jwt_required()
+
 def get_portfolio():
     current_user = get_jwt_identity()
     
@@ -52,10 +70,15 @@ def get_portfolio():
     
     # Get current prices and calculate P&L
     portfolio_with_pnl = []
+    total_today_pnl = 0
+    total_previous_close_value = 0
+    
     for item in portfolio_items:
-        current_price = get_current_price(item['symbol'])
+        current_price, today_change, today_change_percent = get_stock_data(item['symbol'])
         if current_price is None:
-            current_price = item['purchase_price']  # Fallback to purchase price if unable to fetch
+            current_price = item['purchase_price']
+            today_change = 0
+            today_change_percent = 0
         
         item['_id'] = str(item['_id'])
         item['current_price'] = current_price
@@ -63,6 +86,13 @@ def get_portfolio():
         item['current_value'] = item['quantity'] * current_price
         item['pnl'] = item['current_value'] - item['invested_value']
         item['pnl_percentage'] = (item['pnl'] / item['invested_value']) * 100 if item['invested_value'] != 0 else 0
+        
+        # Calculate today's P&L
+        previous_close_price = current_price - today_change if today_change is not None else current_price
+        item['today_pnl'] = item['quantity'] * today_change if today_change is not None else 0
+        item['today_pnl_percentage'] = today_change_percent if today_change_percent is not None else 0
+        total_today_pnl += item['today_pnl']
+        total_previous_close_value += item['quantity'] * previous_close_price
         
         portfolio_with_pnl.append(item)
     
@@ -73,7 +103,10 @@ def get_portfolio():
         'total_pnl': sum(item['pnl'] for item in portfolio_with_pnl),
         'total_pnl_percentage': (sum(item['pnl'] for item in portfolio_with_pnl) / 
                                sum(item['invested_value'] for item in portfolio_with_pnl) * 100 
-                               if sum(item['invested_value'] for item in portfolio_with_pnl) != 0 else 0)
+                               if sum(item['invested_value'] for item in portfolio_with_pnl) != 0 else 0),
+        'total_today_pnl': total_today_pnl,
+        'total_today_pnl_percentage': (total_today_pnl / total_previous_close_value * 100 
+                                      if total_previous_close_value != 0 else 0)
     }
     
     return jsonify({

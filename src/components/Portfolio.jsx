@@ -13,7 +13,9 @@ const Portfolio = () => {
             total_invested: 0,
             total_current: 0,
             total_pnl: 0,
-            total_pnl_percentage: 0
+            total_pnl_percentage: 0,
+            total_today_pnl: 0,
+            total_today_pnl_percentage: 0
         }
     });
     const [newItem, setNewItem] = useState({
@@ -165,7 +167,7 @@ const Portfolio = () => {
             </div>
 
             {/* Summary Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                 <div className="bg-white p-6 rounded-xl shadow-md">
                     <h3 className="text-gray-500 text-sm font-medium mb-1">Total Invested</h3>
                     <p className="text-2xl font-semibold text-gray-800">
@@ -182,6 +184,12 @@ const Portfolio = () => {
                     <h3 className="text-gray-500 text-sm font-medium mb-1">Profit/Loss</h3>
                     <p className={`text-2xl font-semibold ${getPnlClass(portfolioData.totals.total_pnl)}`}>
                         {formatCurrency(portfolioData.totals.total_pnl)} ({portfolioData.totals.total_pnl_percentage.toFixed(2)}%)
+                    </p>
+                </div>
+                <div className="bg-white p-6 rounded-xl shadow-md">
+                    <h3 className="text-gray-500 text-sm font-medium mb-1">Today's Change</h3>
+                    <p className={`text-2xl font-semibold ${getPnlClass(portfolioData.totals.total_today_pnl)}`}>
+                        {formatCurrency(portfolioData.totals.total_today_pnl)} ({portfolioData.totals.total_today_pnl_percentage.toFixed(2)}%)
                     </p>
                 </div>
             </div>
