@@ -39,7 +39,7 @@ export default function Dashboard() {
   const formatCurrency = (value) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'IND',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
     }).format(value);
@@ -186,54 +186,6 @@ export default function Dashboard() {
         {/* Revenue Chart (Placeholder) */}
         <div>
           <PortfolioPerformance portfolioData={portfolioData}/>
-        </div>
-      </div>
-
-      {/* Recent Emails */}
-      <div className="bg-[#dbe8ee] p-4 rounded-xl shadow">
-        <h3 className="text-lg font-semibold mb-4">Recent emails</h3>
-        <div className="space-y-4">
-          {[
-            {
-              name: "Hannah Morgan",
-              avatar: "https://randomuser.me/api/portraits/women/44.jpg",
-              message: "Meeting scheduled",
-              time: "1:24 PM",
-            },
-            {
-              name: "Megan Clark",
-              avatar: "https://randomuser.me/api/portraits/women/68.jpg",
-              message: "Update on marketing campaign",
-              time: "12:32 PM",
-            },
-            {
-              name: "Brandon Williams",
-              avatar: "https://randomuser.me/api/portraits/men/35.jpg",
-              message: "Designly 2.0 is about to launch",
-              time: "Yesterday at 8:57 PM",
-            },
-            {
-              name: "Reid Smith",
-              avatar: "https://randomuser.me/api/portraits/men/65.jpg",
-              message: "My friend Julie loves Dappr!",
-              time: "Yesterday at 8:49 PM",
-            },
-          ].map((email, index) => (
-            <div key={index} className="flex justify-between items-center">
-              <div className="flex items-center gap-4">
-                <img
-                  src={email.avatar}
-                  alt={email.name}
-                  className="w-10 h-10 rounded-full"
-                />
-                <div>
-                  <div className="font-medium">{email.name}</div>
-                  <div className="text-sm text-gray-600">{email.message}</div>
-                </div>
-              </div>
-              <div className="text-sm text-gray-500">{email.time}</div>
-            </div>
-          ))}
         </div>
       </div>
     </div>

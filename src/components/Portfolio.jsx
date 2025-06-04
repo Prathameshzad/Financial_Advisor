@@ -128,7 +128,7 @@ const Portfolio = () => {
     const formatCurrency = (value) => {
         return new Intl.NumberFormat('en-US', {
             style: 'currency',
-            currency: 'USD'
+            currency: 'IND'
         }).format(value);
     };
 

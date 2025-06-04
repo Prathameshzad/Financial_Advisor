@@ -1,5 +1,19 @@
 "use client";
 import { useState } from "react";
+import {
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  Radar,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  CartesianGrid,
+} from "recharts";
 
 export default function StockMetrics() {
   const [ticker, setTicker] = useState("");
@@ -30,9 +44,19 @@ export default function StockMetrics() {
     }
   };
 
+  const chartData = metrics
+    ? [
+        { metric: "Beta", value: metrics.beta_value },
+        { metric: "VaR 95%", value: metrics.var_values["95"] },
+        { metric: "VaR 99%", value: metrics.var_values["99"] },
+        { metric: "Volatility", value: metrics.volatility_value },
+        { metric: "CAGR", value: metrics.cagr_value },
+      ]
+    : [];
+
   return (
-    <div className="max-w-xl mx-auto mt-10 p-6 border rounded shadow text-black">
-      <h2 className="text-2xl font-bold mb-4">Stock Metrics</h2>
+    <div className="max-w-3xl mx-auto mt-10 p-6 border rounded shadow text-black">
+      <h2 className="text-2xl font-bold mb-4 text-center">Stock Metrics Visualized & Explained</h2>
 
       <div className="space-y-4">
         <input
@@ -56,7 +80,7 @@ export default function StockMetrics() {
         </select>
 
         <button
-          className="bg-blue-600 text-black px-4 py-2 rounded hover:bg-blue-700"
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
           onClick={handleFetchMetrics}
           disabled={loading}
         >
@@ -67,12 +91,43 @@ export default function StockMetrics() {
       {error && <p className="mt-4 text-red-500">{error}</p>}
 
       {metrics && (
-        <div className="mt-6 space-y-2">
-          <p><strong>Beta:</strong> {metrics.beta_description}</p>
-          <p><strong>95% VaR:</strong> {metrics.var_description['95']}</p>
-          <p><strong>99% VaR:</strong> {metrics.var_description['99']}</p>
-          <p><strong>Volatility:</strong> {metrics.volatility_description}</p>
-          <p><strong>CAGR:</strong> {metrics.cagr_description}</p>
+        <div className="mt-8">
+          {/* Textual Descriptions */}
+          <div className="space-y-2 mb-10">
+            <h3 className="text-xl font-semibold mb-2">Textual Summary</h3>
+            <p><strong>Beta:</strong> {metrics.beta_description}</p>
+            <p><strong>95% VaR:</strong> {metrics.var_description["95"]}</p>
+            <p><strong>99% VaR:</strong> {metrics.var_description["99"]}</p>
+            <p><strong>Volatility:</strong> {metrics.volatility_description}</p>
+            <p><strong>CAGR:</strong> {metrics.cagr_description}</p>
+          </div>
+
+          {/* Radar Chart */}
+          <div className="mb-10">
+            <h3 className="text-xl font-semibold mb-4 text-center">Radar Chart</h3>
+            <ResponsiveContainer width="100%" height={300}>
+              <RadarChart cx="50%" cy="50%" outerRadius="80%" data={chartData}>
+                <PolarGrid />
+                <PolarAngleAxis dataKey="metric" />
+                <Radar name="Metric Value" dataKey="value" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+              </RadarChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Bar Chart */}
+          <div>
+            <h3 className="text-xl font-semibold mb-4 text-center">Bar Chart</h3>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={chartData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="metric" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="value" fill="#82ca9d" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       )}
     </div>
