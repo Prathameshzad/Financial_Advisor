@@ -13,7 +13,7 @@ email_validator
 feedparser
 flask_jwt_extended
 alpha_vantage
-
+google.generativeai
 # python -m venv venv
 # source venv/bin/activate    # For Linux/Mac
 # venv\Scripts\activate       # For Windows

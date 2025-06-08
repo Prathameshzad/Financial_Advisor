@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import DashboardLayout from "@/components/DashboardLayout";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import ChatBot from "@/components/ChatBot";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -22,6 +23,7 @@ export default function RootLayout({ children }) {
         <ProtectedRoute>
           <DashboardLayout>
             {children}
+            <ChatBot/>
           </DashboardLayout>
         </ProtectedRoute>
     </div>
