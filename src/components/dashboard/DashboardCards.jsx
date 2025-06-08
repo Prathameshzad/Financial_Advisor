@@ -107,73 +107,86 @@ export default function Dashboard() {
   // Card data with portfolio metrics
   const cardData = [
     {
-      icon: <Wallet className="w-6 h-6" />,
+      icon: <Wallet className="w-6 h-6 text-purple-600" />,
       value: formatCurrency(displayValues.total_invested),
       label: "Total Invested",
+      bg: "bg-white",
+      border: "border border-purple-100"
     },
     {
-      icon: <PieChart className="w-6 h-6" />,
+      icon: <PieChart className="w-6 h-6 text-purple-600" />,
       value: formatCurrency(displayValues.total_current),
       label: "Current Value",
+      bg: "bg-white",
+      border: "border border-purple-100"
     },
     {
-      icon: portfolioData.totals.total_pnl >= 0 ? <ArrowUpRight className="w-6 h-6" /> : <ArrowDownRight className="w-6 h-6" />,
+      icon: portfolioData.totals.total_pnl >= 0 ? 
+        <ArrowUpRight className="w-6 h-6 text-green-600" /> : 
+        <ArrowDownRight className="w-6 h-6 text-red-600" />,
       value: `${formatCurrency(displayValues.total_pnl)} (${displayValues.total_pnl_percentage.toFixed(2)}%)`,
       label: "Profit/Loss",
-      color: portfolioData.totals.total_pnl >= 0 ? "text-green-500" : "text-red-500"
+      color: portfolioData.totals.total_pnl >= 0 ? "text-green-600" : "text-red-600",
+      bg: "bg-purple-50",
+      border: "border border-purple-100"
     },
     {
-      icon: portfolioData.totals.total_today_pnl >= 0 ? <TrendingUp className="w-6 h-6" /> : <TrendingDown className="w-6 h-6" />,
+      icon: portfolioData.totals.total_today_pnl >= 0 ? 
+        <TrendingUp className="w-6 h-6 text-green-600" /> : 
+        <TrendingDown className="w-6 h-6 text-red-600" />,
       value: `${formatCurrency(displayValues.total_today_pnl)} (${displayValues.total_today_pnl_percentage.toFixed(2)}%)`,
       label: "Today's Change",
-      color: portfolioData.totals.total_today_pnl >= 0 ? "text-green-500" : "text-red-500"
+      color: portfolioData.totals.total_today_pnl >= 0 ? "text-green-600" : "text-red-600",
+      bg: "bg-purple-50",
+      border: "border border-purple-100"
     },
   ];
 
   if (loading) {
     return (
-      <div className="p-6 bg-[#e7f1f6] min-h-screen flex items-center justify-center">
-        <div className="text-xl">Loading portfolio data...</div>
+      <div className="p-6 bg-purple-50 min-h-screen flex items-center justify-center">
+        <div className="text-xl text-purple-600">Loading portfolio data...</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="p-6 bg-[#e7f1f6] min-h-screen flex items-center justify-center">
-        <div className="text-xl text-red-500">Error: {error}</div>
+      <div className="p-6 bg-purple-50 min-h-screen flex items-center justify-center">
+        <div className="text-xl text-red-600">Error: {error}</div>
       </div>
     );
   }
 
   return (
-    <div className="p-6 bg-[#e7f1f6] min-h-screen space-y-6">
+    <div className="p-6 bg-purple-50 min-h-screen space-y-6">
       {/* Top Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         {cardData.map((card, index) => (
           <div
             key={index}
-            className="flex flex-col gap-2 justify-between p-4 bg-[#dbe8ee] rounded-xl shadow-md text-black"
+            className={`flex flex-col gap-3 justify-between p-5 rounded-xl shadow-sm ${card.bg} ${card.border} hover:shadow-md hover:shadow-purple-100 transition-all duration-200`}
           >
             <div className="flex justify-between items-start">
-              {card.icon}
-              <div className="text-xl font-bold">•••</div>
+              <div className="p-2 rounded-lg bg-purple-100">
+                {card.icon}
+              </div>
             </div>
-            <div className={`text-2xl font-semibold ${card.color || ''}`}>
+            <div className={`text-2xl font-bold ${card.color || 'text-gray-800'}`}>
               {card.value}
             </div>
-            <div className="text-sm text-gray-700">{card.label}</div>
+            <div className="text-sm text-purple-600 font-medium">{card.label}</div>
           </div>
         ))}
       </div>
 
-      {/* Clients & Revenue Section */}
+      {/* Charts Section */}
       <div className="flex flex-col md:flex-row gap-4">
         {/* Sector Distribution Chart */}
-        <div className="flex-1 bg-white rounded-xl shadow p-4">
+        <div className="flex-1 bg-white rounded-xl shadow-sm p-4 border border-purple-100">
           <div className="flex justify-between items-center mb-2">
-            <h2 className="font-semibold text-lg">Sector Distribution</h2>
-            <p className="text-sm text-gray-500">By invested value</p>
+            <h2 className="font-semibold text-lg text-gray-800">Sector Distribution</h2>
+            <p className="text-sm text-purple-600">By invested value</p>
           </div>
           <div className="h-64">
             <SectorDistributionChart 
@@ -183,9 +196,9 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Revenue Chart (Placeholder) */}
-        <div>
-          <PortfolioPerformance portfolioData={portfolioData}/>
+        {/* Portfolio Performance */}
+        <div className="flex-1 bg-white rounded-xl shadow-sm p-4 border border-purple-100">
+          <PortfolioPerformance portfolioData={portfolioData} theme="light" />
         </div>
       </div>
     </div>

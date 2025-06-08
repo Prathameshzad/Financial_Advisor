@@ -92,7 +92,7 @@ export default function ChatBot() {
       {open ? (
         <div className="w-80 h-96 bg-white rounded-xl shadow-2xl flex flex-col border border-gray-200">
           {/* Header */}
-          <div className="p-3 font-semibold bg-blue-600 text-white rounded-t-xl flex justify-between items-center">
+          <div className="p-3 font-semibold bg-purple-600 text-white rounded-t-xl flex justify-between items-center">
             <span className="flex items-center gap-2">
               <span className="w-2 h-2 bg-green-400 rounded-full"></span>
               AI ChatBot
@@ -100,14 +100,14 @@ export default function ChatBot() {
             <div className="flex items-center gap-2">
               <button 
                 onClick={clearChat}
-                className="text-sm hover:bg-blue-700 px-2 py-1 rounded transition-colors"
+                className="text-sm hover:bg-purple-700 px-2 py-1 rounded transition-colors"
                 title="Clear chat"
               >
                 🗑️
               </button>
               <button 
                 onClick={() => setOpen(false)} 
-                className="text-sm hover:bg-blue-700 px-2 py-1 rounded transition-colors"
+                className="text-sm hover:bg-purple-700 px-2 py-1 rounded transition-colors"
               >
                 ✖
               </button>
@@ -124,7 +124,7 @@ export default function ChatBot() {
                 <div
                   className={`max-w-[80%] text-sm p-3 rounded-lg shadow-sm ${
                     msg.role === "user" 
-                      ? "bg-blue-600 text-white rounded-br-none" 
+                      ? "bg-purple-600 text-white rounded-br-none" 
                       : "bg-white text-gray-800 rounded-bl-none border border-gray-200"
                   }`}
                 >
@@ -154,7 +154,7 @@ export default function ChatBot() {
           <div className="p-3 border-t bg-white rounded-b-xl">
             <div className="flex gap-2">
               <input
-                className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyPress}
@@ -165,7 +165,7 @@ export default function ChatBot() {
               <button
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   input.trim() && !isLoading
-                    ? "bg-blue-600 text-white hover:bg-blue-700" 
+                    ? "bg-blue-600 text-white hover:bg-purple-700" 
                     : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 }`}
                 onClick={sendMessage}
@@ -179,7 +179,7 @@ export default function ChatBot() {
       ) : (
         <button
           onClick={() => setOpen(true)}
-          className="bg-blue-600 hover:bg-blue-700 text-white rounded-full p-4 shadow-lg transition-all duration-200 hover:scale-105"
+          className="bg-purple-600 hover:bg-purple-700 text-white rounded-full p-4 shadow-lg transition-all duration-200 hover:scale-105"
           title="Open AI ChatBot"
         >
           <span className="text-2xl">💬</span>

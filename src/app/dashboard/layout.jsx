@@ -19,7 +19,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <div>
+    <div className="bg-purple-50">
         <ProtectedRoute>
           <DashboardLayout>
             {children}
