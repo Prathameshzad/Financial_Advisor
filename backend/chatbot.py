@@ -8,7 +8,6 @@ load_dotenv()
 
 chatbot_blueprint = Blueprint("chatbot", __name__)
 
-# Enable CORS for this blueprint
 def init_cors(app):
     CORS(app, resources={
         r"/chatbot": {
@@ -28,40 +27,36 @@ model = genai.GenerativeModel("gemini-1.5-flash")
 
 @chatbot_blueprint.route("/chatbot", methods=["POST", "OPTIONS"])
 def chatbot():
-    # Handle preflight OPTIONS request
     if request.method == "OPTIONS":
         return jsonify({"status": "ok"}), 200
-    
+
     try:
         data = request.get_json()
         if not data:
             return jsonify({"error": "No JSON data provided"}), 400
-            
-        message = data.get("message", "")
 
-        if not message or not message.strip():
+        message = data.get("message", "").strip()
+
+        if not message:
             return jsonify({"error": "Please enter a valid question."}), 400
 
-        # Generate response using Gemini
-        response = model.generate_content(message)
-        
-        # Check if response was generated successfully
+        response = model.generate_content(f"Answer briefly and to the point and the point should be related to finance : {message}")
+
         if not response or not response.text:
             return jsonify({"error": "Failed to generate response"}), 500
-            
+
         return jsonify({
             "response": response.text.strip(),
             "status": "success"
         }), 200
-        
+
     except Exception as e:
         print(f"Error in chatbot endpoint: {str(e)}")
         return jsonify({
-            "error": "An error occurred while processing your request. Please try again.",
+            "error": "An error occurred while processing your request.",
             "details": str(e)
         }), 500
 
-# Health check endpoint
 @chatbot_blueprint.route("/health", methods=["GET"])
 def health_check():
     return jsonify({"status": "healthy", "service": "chatbot"}), 200
